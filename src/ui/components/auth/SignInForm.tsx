@@ -7,6 +7,8 @@ import Button from "../ui/button/Button";
 import { useForm } from "react-hook-form";
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { AuthServiceImpl } from "../../../infraestructure/services/AuthServiceImpl";
+import { LoginUseCase } from "../../../core/useCases/LoginUseCase";
 
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -26,20 +28,24 @@ export default function SignInForm() {
     )
   })
 
-  const handleSubmit = (data: unknown) => {
-    console.log(data)
+  const handleSubmit = async (data: {email: string; password: string}) => {
+    const authService = new AuthServiceImpl();
+    const loginUseCase = new LoginUseCase(authService);
+
+    const user = await loginUseCase.login(data.email, data.password);
+    if (user) {
+      alert('Login successful!');
+      localStorage.setItem('token', user.token);
+      window.location.href = '/';
+    } else {
+      alert('Login failed');
+    }
   }
 
   return (
     <div className="flex flex-col flex-1">
       <div className="w-full max-w-md pt-10 mx-auto">
-        <Link
-          to="/"
-          className="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
-        >
-          <ChevronLeftIcon className="size-5" />
-          Back to dashboard
-        </Link>
+
       </div>
       <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
         <div>

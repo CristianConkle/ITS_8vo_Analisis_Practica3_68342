@@ -7,12 +7,15 @@ import App from "./App.tsx";
 import { ThemeProvider } from "./context/ThemeContext.tsx";
 import "./index.css";
 import { AppWrapper } from "./ui/components/common/PageMeta.tsx";
+import { BrowserRouter } from "react-router-dom"; // ✅ agrega esto
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider>
       <AppWrapper>
-        <App />
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </AppWrapper>
     </ThemeProvider>
   </StrictMode>
